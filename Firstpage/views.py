@@ -1,5 +1,11 @@
 from django.shortcuts import render
+from .models import Appeal
 
-# Create your views here.
+
 def index(request):
-    return render(request, 'Firstpage/first.html')
+
+    appeals = Appeal.objects.all().order_by("-created_at")
+
+    return render(request, "Firstpage/first.html", {
+        "appeals": appeals
+    })

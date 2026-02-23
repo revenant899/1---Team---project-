@@ -28,6 +28,12 @@
             <div class="card-body">
               <h5 class="card-title">{{ appeal.title }}</h5>
               <p class="card-text">{{ appeal.description }}</p>
+              <p>
+              Status:
+              <span class="badge bg-secondary">
+                {{ appeal.get_status_display }}
+              </span>
+              </p>
               <p class="card-text"><small class="text-muted
                 ">Submitted on {{ appeal.created_at|date:"F j, Y, g:i a" }}</small></p>
             </div>
