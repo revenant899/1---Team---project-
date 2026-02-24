@@ -1,0 +1,75 @@
+[
+  {
+    "model": "appeals.appeal",
+    "pk": 1,
+    "fields": {
+      "title": "Cannot log in",
+      "description": "I am unable to log in using my credentials.",
+      "category": "account_issue",
+      "image": "",
+      "status": "not_reviewed",
+      "created_at": "2026-02-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "appeals.appeal",
+    "pk": 2,
+    "fields": {
+      "title": "Billing error",
+      "description": "I was charged twice for my subscription.",
+      "category": "billing_issue",
+      "image": "",
+      "status": "considered",
+      "created_at": "2026-02-23T14:30:00Z"
+    }
+  },
+  {
+    "model": "appeals.appeal",
+    "pk": 3,
+    "fields": {
+      "title": "Feature request",
+      "description": "Please add dark mode to the app.",
+      "category": "other",
+      "image": "",
+      "status": "not_reviewed",
+      "created_at": "2026-02-20T08:15:00Z"
+    }
+},
+  {
+    "model": "appeals.appeal",
+    "pk": 4,
+    "fields": {
+      "title": "App crashes",
+      "description": "The mobile app crashes whenever I try to upload a file.",
+      "category": "technical_issue",
+      "image": "",
+      "status": "not_reviewed",
+      "created_at": "2026-02-22T11:45:00Z"
+    }
+  },
+  {
+    "model": "appeals.appeal",
+    "pk": 5,
+    "fields": {
+      "title": "Password reset not working",
+      "description": "I never receive the password reset email.",
+      "category": "account_issue",
+      "image": "",
+      "status": "rejected",
+      "created_at": "2026-02-21T09:20:00Z"
+    }
+  },
+  {
+    "model": "appeals.appeal",
+    "pk": 6,
+    "fields": {
+      "title": "Invoice request",
+      "description": "Can I get an invoice for last month’s payment?",
+      "category": "billing_issue",
+      "image": "",
+      "status": "considered",
+      "created_at": "2026-02-19T16:00:00Z"
+    }
+  }
+]
+    

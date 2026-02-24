@@ -1,41 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Appeals</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1Gqv9iE5x7V6tbtF5p3p6w5"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+{% extends "layout.html" %}
+{% block title %}Appeals{% endblock %}
+
+{% block content %}
+    <header class="bg-primary text-white py-5 mb-4">
       <div class="container">
-        <a class="navbar-brand" href="#">HelpDesk</a>
+        <h1 class="m-0">HelpDesk Appeals</h1>
       </div>
-    </nav>
+    </header>
 
-    <main class="container py-4">
-      <h1 class="mb-4">appeals</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">Recent requests</h2>
+      <a 
+        class="btn btn-danger rounded-pill px-4"
+        href="/appeals/create/">
+        + New appeal
+      </a>
+    </div>
 
-      <div class="row g-4">
+    <div class="row g-4">
         {% for appeal in appeals %}
         <div class="col-md-6 col-lg-4">
-          <div class="card h-100">s
+          <div class="card h-100">
             <div class="card-body">
               <h5 class="card-title">{{ appeal.title }}</h5>
-              <p class="card-text">{{ appeal.description }}</p>
-              <p>
-              Status:
-              <span class="badge bg-secondary">
-                {{ appeal.get_status_display }}
-              </span>
-              </p>
-              <p class="card-text"><small class="text-muted
-                ">Submitted on {{ appeal.created_at|date:"F j, Y, g:i a" }}</small></p>
+              <p class="card-text text-truncate" style="max-height:4.5rem;">{{ appeal.description }}</p>
+              <p class="card-text"><small class="text-muted">Submitted on {{ appeal.created_at|date:"F j, Y, g:i a" }}</small></p>
+              <a href="/appeals/update/{{ appeal.pk }}/" class="btn btn-sm btn-outline-secondary mt-2">Edit</a>
             </div>
           </div>
         </div>
@@ -45,16 +35,4 @@
         </div>
         {% endfor %}
       </div>
-    </main>
-
-    <footer class="container py-4">
-      <p class="text-muted mb-0">♥ {{ year|default:2025 }} HelpDesk</p>
-    </footer>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-9NDL8l6rQjY0kG3s5EwP4pNQvE0yQ0j7l8f5mI8c9oA1qYj6tK9HqJrXJ4v8Nw8p"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Update appeal{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+  <div class="bg-dark rounded-4 p-4 w-75">
+
+    <h2 class="fw-semibold mb-4">
+      ✏️ Update Appeal
+    </h2>
+
+    {% include "components/appeal_form.html" with submit_button_text="Save Changes" %}
+
+  </div>
+</div>
+{% endblock %}
