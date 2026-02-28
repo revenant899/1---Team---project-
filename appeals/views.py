@@ -63,7 +63,7 @@ def appeal_detail(request, pk):
             comment.appeal = appeal
             comment.author = request.user  
             comment.save()
-            return redirect("appeal_detail", pk=appeal.pk)
+            return redirect("appeals:appeal_detail", pk=appeal.pk)
     else:
         form = CommentForm()
 
