@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Docker: Python - Django",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "python": {
+                "pathMappings": [
+                    {
+                        "localRoot": "${workspaceFolder}",
+                        "remoteRoot": "/app"
+                    }
+                ],
+                "projectType": "django"
+            },
+            "dockerCompose": {
+                "files": [
+                    "compose.yaml",
+                    "docker/compose.debug.yaml"  // Ось тут ми вказуємо новий шлях
+                ]
+            }
+        }
+    ]
+}
