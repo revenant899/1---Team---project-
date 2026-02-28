@@ -29,8 +29,47 @@
 
         {% for c in appeal.comments.all %}
         <div class="bg-black rounded-3 p-3 mb-2">
-            <div class="small text-secondary mb-1">{{ c.created_at|date:"Y-m-d H:i" }}</div>
+
+            
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="small text-primary fw-semibold">
+                    👤 {{ c.author.username }}
+                </span>
+                <span class="small text-secondary">
+                    {{ c.created_at|date:"Y-m-d H:i" }}
+                </span>
+            </div>
+
+            
+            {% if edit_comment_id == c.id %}
+                <form method="post" class="mt-2">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="edit">
+                    <input type="hidden" name="comment_id" value="{{ c.id }}">
+                    <textarea name="text" class="form-control bg-dark text-light border-secondary" rows="2">{{ c.text }}</textarea>
+                    <div class="mt-2 d-flex gap-2">
+                        <button class="btn btn-success btn-sm">Save</button>
+                        <a href="{% url 'appeals:appeal_detail' appeal.pk %}" class="btn btn-secondary btn-sm">Cancel</a>
+                    </div>
+                </form>
+            {% else %}
             <div>{{ c.text }}</div>
+
+                
+                {% if request.user == c.author %}
+                <div class="mt-2 d-flex gap-2">
+                    <a href="?edit={{ c.id }}" class="btn btn-outline-warning btn-sm">✏️ Edit</a>
+                    <form method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="comment_id" value="{{ c.id }}">
+                        <button class="btn btn-outline-danger btn-sm"
+                                onclick="return confirm('Delete this comment?')">🗑 Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+            {% endif %}
+
         </div>
         {% empty %}
         <div class="text-secondary mb-3">No comments yet.</div>
@@ -39,6 +78,7 @@
         <h5 class="fw-semibold mt-4">Add comment</h5>
         <form method="post" class="mt-2">
             {% csrf_token %}
+            <input type="hidden" name="action" value="add">
             {{ form.text }}
             <button class="btn btn-primary mt-3">Add</button>
         </form>
