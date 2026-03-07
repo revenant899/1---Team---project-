@@ -93,15 +93,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres.qhzcdapzeeleukebuzvd',
-        'PASSWORD': 'a#5ebh4TEaphhc/',  # Ваш пароль у чистому вигляді
+        'PASSWORD': 'a#5ebh4TEaphhc/',  
         'HOST': 'aws-1-eu-west-1.pooler.supabase.com',
         'PORT': '6543',
     }
 }
 
-# Перевірка підключення для консолі
+
 if DATABASES['default']['PASSWORD']:
-    print("🚀 СУПЕР! База підключена напряму через параметри!")
+    print("supabase connected")
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
