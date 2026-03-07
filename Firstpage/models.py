@@ -17,7 +17,7 @@ class Appeal(models.Model):
         default=Status.NOT_REVIEWED
     )
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appeals")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='firstpage_appeals')
     assigned_admin = models.ForeignKey(User, on_delete=models.SET_NULL,
                                        related_name="assigned_tickets",
                                        null=True, blank=True)

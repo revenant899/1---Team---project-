@@ -81,27 +81,6 @@
     <div class="row g-4">
         {% for appeal in appeals %}
         <div class="col-md-6 col-lg-4">
-<<<<<<< HEAD
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">{{ appeal.title }}</h5>
-              <p class="card-text">{{ appeal.description }}</p>
-              <p>Author: {{ appeal.author.username }}</p>
-              <p>
-                Status:
-                {% if appeal.status == "not_reviewed" %}
-                  <span class="badge bg-warning">Not reviewed</span>
-                {% elif appeal.status == "considered" %}
-                  <span class="badge bg-success">Considered</span>
-                {% elif appeal.status == "rejected" %}
-                  <span class="badge bg-danger">Rejected</span>
-                {% endif %}
-              </p>
-              {% if appeal.assigned_admin %}
-              <p>Assigned to: {{ appeal.assigned_admin.username }}</p>
-              {% endif %}
-              <p class="card-text"><small class="text-muted">Submitted on {{ appeal.created_at|date:"F j, Y, g:i a" }}</small></p>
-=======
           <a href="/appeals/detail/{{ appeal.pk }}/" class="text-decoration-none" >
           <div class="card h-100 appeal-card">
             <div class="card-body d-flex flex-column p-4">
@@ -123,7 +102,6 @@
                 <a href="/appeals/update/{{ appeal.pk }}/" class="btn btn-sm btn-outline-light w-100 rounded-pill">Edit Details</a>
               </div>
               </a>
->>>>>>> origin/main
             </div>
           </div>
         </div>

@@ -11,9 +11,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
+from pathlib import Path
+from dotenv import load_dotenv
+from urllib.parse import unquote
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+env_path = BASE_DIR / '.env'
+load_dotenv(dotenv_path=env_path)
+
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -74,13 +86,31 @@ WSGI_APPLICATION = 'HelpDesk.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+raw_db_url = os.getenv('DATABASE_URL', '')
 
+
+DATABASE_URL = raw_db_url.strip().replace('"', '').replace("'", "")
+
+if DATABASE_URL and DATABASE_URL.startswith('postgresql://'):
+   
+    db_config = dj_database_url.parse(DATABASE_URL)
+   
+    db_config['PASSWORD'] = unquote(db_config.get('PASSWORD', ''))
+    
+    DATABASES = {
+        'default': db_config
+    }
+    DATABASES['default']['CONN_MAX_AGE'] = 600
+    print(" Supabase connected.")
+else:
+   
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    print("error")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

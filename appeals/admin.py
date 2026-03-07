@@ -7,7 +7,7 @@ from .models import Appeal, Comment
 class AppealAdmin(admin.ModelAdmin):
 
     list_display = ("title", "status", "created_at")
-
+    list_editable = ('status',)
     list_filter = ("status",)
 
     search_fields = ("title", "description")

@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from appeals.models import Appeal
 from appeals.forms import AppealForm
 from appeals.forms import CommentForm
+from .models import Appeal, Comment
+from django.views.decorators.http import require_POST
 
 @login_required
 def admin_panel(request):
@@ -58,21 +60,45 @@ def appeal_status(request, pk):
 @login_required
 def appeal_detail(request, pk):
     appeal = get_object_or_404(Appeal, pk=pk)
+    
+   
+    edit_comment_id = request.GET.get('edit')
 
     if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.appeal = appeal
-            comment.author = request.user  
-            comment.save()
+        action = request.POST.get("action")
+        comment_id = request.POST.get("comment_id")
+
+      
+        if action == "delete" and comment_id:
+            comment = get_object_or_404(Comment, id=comment_id, author=request.user)
+            comment.delete()
             return redirect("appeals:appeal_detail", pk=appeal.pk)
+
+       
+        elif action == "edit" and comment_id:
+            comment = get_object_or_404(Comment, id=comment_id, author=request.user)
+            new_text = request.POST.get("text")
+            if new_text:
+                comment.text = new_text
+                comment.save()
+            return redirect("appeals:appeal_detail", pk=appeal.pk)
+
+       
+        else:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.appeal = appeal
+                comment.author = request.user
+                comment.save()
+                return redirect("appeals:appeal_detail", pk=appeal.pk)
     else:
         form = CommentForm()
 
     return render(request, "appeals/detail.html", {
         "appeal": appeal,
-        "form": form
+        "form": form,
+        "edit_comment_id": int(edit_comment_id) if edit_comment_id else None,
     })
 
 @login_required
@@ -90,3 +116,15 @@ def admin_panel(request):
         ).distinct()
 
     return render(request, "appeals/adminpanel.html", {"appeals": appeals, "q": q})
+
+@require_POST
+def update_status(request, pk):
+    appeal = get_object_or_404(Appeal, pk=pk)
+    new_status = request.POST.get('status')
+    
+   
+    if new_status in Appeal.Status.values:
+        appeal.status = new_status
+        appeal.save()
+        
+    return redirect(request.META.get('HTTP_REFERER', 'adminpanel'))

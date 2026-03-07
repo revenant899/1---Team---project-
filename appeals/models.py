@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Appeal(models.Model):
@@ -15,13 +16,7 @@ class Appeal(models.Model):
         CONSIDERED = "considered", "Considered"
         REJECTED = "rejected", "Rejected"
 
-    author = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="appeals",
-        null=True,
-        blank=True
-    )
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_appeals', null=True, blank=True)
 
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -42,7 +37,8 @@ from django.contrib.auth.models import User
 
 class Comment(models.Model):
     appeal = models.ForeignKey(Appeal, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments", null=True)
+    
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comments", null=True, blank=True)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

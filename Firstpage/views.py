@@ -1,14 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Appeal
+from appeals.models import Appeal
 from django.contrib.auth.decorators import login_required
 from .forms import AssignAdminForm
 
 @login_required
 def index(request):
-    if request.user.is_staff:
-        appeals = Appeal.objects.all().order_by("-created_at")
-    else:
-        appeals = Appeal.objects.filter(author=request.user).order_by("-created_at")
+    # if request.user.is_staff:
+    appeals = Appeal.objects.all().order_by("-created_at")
+    # else:
+    #     appeals = Appeal.objects.filter(author=request.user).order_by("-created_at")
 
     return render(request, "Firstpage/first.html", {"appeals": appeals})
 
