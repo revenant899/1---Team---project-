@@ -33,7 +33,6 @@ class Appeal(models.Model):
     def __str__(self):
         return self.title
     
-from django.contrib.auth.models import User
 
 class Comment(models.Model):
     appeal = models.ForeignKey(Appeal, on_delete=models.CASCADE, related_name="comments")
@@ -44,3 +43,34 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment #{self.id} for Appeal #{self.appeal_id}"
+
+class AdminLog(models.Model):
+    ACTION_CHOICES = [
+    ("create", "Create"),
+    ("update", "Update"),
+    ("delete", "Delete"),
+    ("status_change", "Status Change"),
+    ("comment_add", "Comment Add"),
+    ("comment_edit", "Comment Edit"),
+    ("comment_delete", "Comment Delete"),
+
+    ]
+
+    admin = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="admin_logs"
+    )
+    appeal = models.ForeignKey(
+        Appeal,
+        on_delete=models.SET_NULL,
+        related_name="logs",
+        null=True,
+        blank=True
+    )
+    action = models.CharField(max_length=30, choices=ACTION_CHOICES)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.admin.username} - {self.action} - {self.created_at:%Y-%m-%d %H:%M}"
