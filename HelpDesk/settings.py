@@ -11,9 +11,21 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
+from pathlib import Path
+from dotenv import load_dotenv
+from urllib.parse import unquote
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+env_path = BASE_DIR / '.env'
+load_dotenv(dotenv_path=env_path)
+
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -74,8 +86,7 @@ WSGI_APPLICATION = 'HelpDesk.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-
-
+B_URL = os.getenv('DATABASE_URL', '')
 
 DATABASES = {
     'default': {
@@ -100,6 +111,8 @@ if DATABASES['default']['PASSWORD']:
 # }
 
 
+if DATABASES['default']['PASSWORD']:
+    print("supabase connected")
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
