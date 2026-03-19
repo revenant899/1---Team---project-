@@ -4,7 +4,9 @@ from . import views
 app_name = 'appeals'
 
 urlpatterns = [
+    path("", views.dashboard, name="dashboard"),
     path('adminpanel/', views.admin_panel, name='appeals_adminpanel'),
+    path('userpanel/', views.user_panel, name='appeals_userpanel'),
     path('create/', views.appeal_create, name='appeal_create'),
     path('update/<int:pk>/', views.appeal_update, name='appeal_update'),
     path('delete/<int:pk>/', views.appeal_delete, name='appeal_delete'),

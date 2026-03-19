@@ -1,0 +1,13 @@
+<h2>My Appeals</h2>
+
+<a href="/appeals/create/">Create Appeal</a>
+
+{% for appeal in appeals %}
+  <div>
+    <h3>{{ appeal.title }}</h3>
+    <p>{{ appeal.description }}</p>
+    <small>{{ appeal.created_at }}</small>
+  </div>
+{% empty %}
+  <p>No appeals</p>
+{% endfor %}

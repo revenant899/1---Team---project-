@@ -8,14 +8,31 @@ from appeals.models import Appeal, Comment, AdminLog
 from appeals.forms import AppealForm, CommentForm
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
+from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
+def dashboard(request):
+    if request.user.is_staff:
+        return redirect("appeals:admin_panel")
+    else:
+        return redirect("appeals:user_panel")
+    
+@login_required
+def user_panel(request):
+    appeals = Appeal.objects.filter(author=request.user).order_by("-created_at")
+
+    return render(request, "appeals/userpanel.html", {
+        "appeals": appeals
+    })
+
+@staff_member_required
 def admin_logs(request):
     logs = AdminLog.objects.select_related("admin", "appeal").order_by("-created_at")
     return render(request, "appeals/logs.html", {"logs": logs})
 
-@login_required
+@staff_member_required
 def admin_panel(request):
+  
     q = request.GET.get("q", "").strip()
     appeals = Appeal.objects.all().order_by("-created_at")
 
