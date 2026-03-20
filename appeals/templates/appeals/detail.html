@@ -2,6 +2,7 @@
 {% block title %}Appeal details{% endblock %}
 
 {% block content %}
+
 <div class="container-fluid px-4">
     <div class="bg-dark rounded-4 p-4">
 
@@ -12,7 +13,7 @@
 
         <div class="text-secondary mb-2">
             Category: <span class="text-light">{{ appeal.get_category_display }}</span> •
-            Status: <span class="text-light">{{ appeal.get_status_display }}</span> •
+           Status: <span class="status-badge status-{{ appeal.status }}">{{ appeal.get_status_display }}</span> •
             {{ appeal.created_at|date:"Y-m-d H:i" }}
         </div>
 
@@ -85,4 +86,10 @@
 
     </div>
 </div>
+<style>
+.status-badge { font-weight: 600; font-size: 0.85rem; border-radius: 20px; padding: 3px 12px; }
+.status-not_reviewed { background-color: rgba(108,117,125,0.2); color: #adb5bd; }
+.status-considered { background-color: rgba(255,193,7,0.2); color: #ffc107; }
+.status-rejected { background-color: rgba(220,53,69,0.2); color: #ea868f; }
+</style>
 {% endblock %}

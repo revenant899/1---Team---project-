@@ -99,6 +99,17 @@ DATABASES = {
     }
 }
 
+# Перевірка підключення для консолі
+if DATABASES['default']['PASSWORD']:
+    print("supabase connection success")
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 
 if DATABASES['default']['PASSWORD']:
     print("supabase connected")
