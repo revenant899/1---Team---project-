@@ -3,7 +3,12 @@
 
 {% block styles %}
 <style>
-  
+  /* Кастомні кольори статусів (перебивають стандартні) */
+  .badge-success-custom { background-color: #198754 !important; color: white !important; }
+  .badge-danger-custom { background-color: #dc3545 !important; color: white !important; }
+  .badge-warning-custom { background-color: #ffc107 !important; color: #1a1a1a !important; }
+  .badge-secondary-custom { background-color: #6c757d !important; color: white !important; }
+
   .page-header {
     background: linear-gradient(135deg, rgba(13, 110, 253, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
     border-radius: 20px;
@@ -11,7 +16,6 @@
     padding: 3rem 2rem;
   }
 
-  
   .appeal-card {
     background: rgba(30, 39, 50, 0.5);
     backdrop-filter: blur(5px);
@@ -36,7 +40,6 @@
     color: #8b949e !important;
   }
 
-  
   .btn-danger-custom {
     background: linear-gradient(45deg, #dc3545, #ff4d5a);
     border: none;
@@ -50,15 +53,6 @@
     background: linear-gradient(45deg, #ff4d5a, #dc3545);
   }
 
-  
-  .empty-state {
-    background: rgba(255, 255, 255, 0.03);
-    border: 2px dashed rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 4rem;
-    text-align: center;
-  }
-
   .category-filter {
     background: rgba(30, 39, 50, 0.5);
     backdrop-filter: blur(5px);
@@ -67,19 +61,6 @@
     color: #fff;
     padding: 0.375rem 0.75rem;
     font-size: 0.875rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .category-filter:focus {
-    background: rgba(40, 50, 65, 0.8);
-    border-color: rgba(13, 110, 253, 0.4);
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    color: #fff;
-  }
-
-  .category-filter option {
-    background: rgba(30, 39, 50, 0.9);
-    color: #fff;
   }
 </style>
 {% endblock %}
@@ -104,9 +85,7 @@
           <option value="other">Other</option>
         </select>
         
-        <a 
-          class="btn btn-danger-custom rounded-pill px-4 py-2 fw-bold"
-          href="/appeals/create/">
+        <a class="btn btn-danger-custom rounded-pill px-4 py-2 fw-bold" href="/appeals/create/">
           + New appeal
         </a>
       </div>
@@ -115,13 +94,27 @@
     <div class="row g-4" id="appealsContainer">
         {% for appeal in appeals %}
         <div class="col-md-6 col-lg-4 appeal-item" data-category="{{ appeal.category }}">
-          <a href="/appeals/detail/{{ appeal.pk }}/" class="text-decoration-none" >
           <div class="card h-100 appeal-card">
             <div class="card-body d-flex flex-column p-4">
-              <h5 class="card-title mb-3">{{ appeal.title }}</h5>
-              <p class="card-text text-secondary mb-4" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
-                {{ appeal.description }}
-              </p>
+              
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <a href="/appeals/detail/{{ appeal.pk }}/" class="text-decoration-none">
+                  <h5 class="card-title mb-0">{{ appeal.title }}</h5>
+                </a>
+                <span class="badge rounded-pill 
+                  {% if "Considered" in appeal.get_status_display %}badge-success-custom
+                  {% elif "Rejected" in appeal.get_status_display %}badge-danger-custom
+                  {% elif "Not reviewed" in appeal.get_status_display %}badge-warning-custom
+                  {% else %}badge-secondary-custom{% endif %}" style="font-size: 0.7rem;">
+                  {{ appeal.get_status_display }}
+                </span>
+              </div>
+
+              <a href="/appeals/detail/{{ appeal.pk }}/" class="text-decoration-none">
+                <p class="card-text text-secondary mb-4" style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+                  {{ appeal.description }}
+                </p>
+              </a>
               
               <div class="mt-auto">
                 <p class="card-text mb-3">
@@ -135,54 +128,35 @@
                 </p>
                 <a href="/appeals/update/{{ appeal.pk }}/" class="btn btn-sm btn-outline-light w-100 rounded-pill">Edit Details</a>
                 <div class="mt-2 text-secondary small">
-                <i class="bi bi-chat"></i> {{ appeal.comments.count }} comments
+                  <i class="bi bi-chat"></i> {{ appeal.comments.count }} comments
                 </div>
               </div>
-              </a>
+
             </div>
           </div>
         </div>
         {% empty %}
-        <div class="col-12">
-          <div class="empty-state">
+        <div class="col-12 text-center py-5">
             <h3 class="text-secondary">No appeals found</h3>
             <p class="text-muted">You haven't created any support requests yet.</p>
-          </div>
         </div>
         {% endfor %}
       </div>
 
 <script>
-  // Category filter functionality
   const categoryFilter = document.getElementById('categoryFilter');
-  const appealsContainer = document.getElementById('appealsContainer');
   const appealItems = document.querySelectorAll('.appeal-item');
-  const emptyState = appealsContainer.querySelector('.empty-state');
 
   categoryFilter.addEventListener('change', function() {
     const selectedCategory = this.value;
-    let visibleCount = 0;
-
     appealItems.forEach(item => {
       const itemCategory = item.getAttribute('data-category');
-      
       if (selectedCategory === '' || itemCategory === selectedCategory) {
         item.style.display = '';
-        visibleCount++;
       } else {
         item.style.display = 'none';
       }
     });
-
-    // Show/hide empty state message
-    const emptyStateMsg = appealsContainer.querySelector('.col-12.appeal-item');
-    if (emptyStateMsg) {
-      if (visibleCount === 0) {
-        emptyStateMsg.style.display = '';
-      } else {
-        emptyStateMsg.style.display = 'none';
-      }
-    }
   });
 </script>
 {% endblock %}
